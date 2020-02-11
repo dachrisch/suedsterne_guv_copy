@@ -1,42 +1,44 @@
 function validate(guv_sheet, backup_sheet, suedsterne_guv) {
   return validate_untouched_values(guv_sheet, backup_sheet) && 
-    validate_copied_values(suedsterne_guv, guv_sheet, backup_sheet)
+    validate_copied_values(suedsterne_guv, guv_sheet)
 }
 
 function validate_untouched_values(guv_sheet, backup_sheet) {
-  var team_name = property().team_name
-  var copy_year = property().copy_year
-
-  var original_data_not_team = filter_sheet(backup_sheet, property().itagile_guv_data_tab, 
-                                            function(row, index) {return (index > 0 && row[2] != team_name)})
-
-  var original_data_team_not_in_year = filter_sheet(backup_sheet, property().itagile_guv_data_tab, 
-                                                    function(row, index) {return (row[2] === team_name && row[0] != copy_year)})
-  
-  var validation_data_not_team = filter_sheet(guv_sheet, property().itagile_guv_data_tab,
-                                              function(row, index) {return (index > 0 && row[2] != team_name)})
-  
-  var validation_data_team_not_in_year = filter_sheet(guv_sheet, property().itagile_guv_data_tab, 
-                                                      function(row, index) {return (row[2] === team_name && row[0] != copy_year)})
-
-  console.log('validating [%d] existing other team values remaining intact...', original_data_not_team.length)
-  validate_values(original_data_not_team, validation_data_not_team, guv_sheet, backup_sheet)
-  console.log('validating [%d] existing %s team values remaining intact...', original_data_team_not_in_year.length, team_name)
-  return validate_values(original_data_team_not_in_year, validation_data_team_not_in_year)
+  return validate_untouched_values_not_year(guv_sheet, backup_sheet) &&
+    validate_untouched_values_not_team(guv_sheet, backup_sheet)
 }
 
-function validate_copied_values(suedsterne_guv, guv_sheet, backup_sheet) {
-  var team_name = property().team_name
-  var copy_year = property().copy_year
+function validate_untouched_values_not_year(guv_sheet, backup_sheet) {
 
-  var original_suedsterne_data = filter_sheet(suedsterne_guv, property().suedsterne_guv_data_tab,
-                                              function(row, index){return (row[0] === copy_year)})
+  var original = filter_sheet(backup_sheet, property().itagile_guv_data_tab, 
+                              function(row, index) {return (row[2] === property().team_name && row[0] != property().copy_year)})
   
-  var copied_suedsterne_data = filter_sheet(guv_sheet, property().itagile_guv_data_tab, 
-                                                      function(row, index) {return (row[2] === team_name && row[0] === copy_year)})
+  var validation = filter_sheet(guv_sheet, property().itagile_guv_data_tab, 
+                                function(row, index) {return (row[2] === property().team_name && row[0] != property().copy_year)})
+
+  console.log('validating [%d] existing %s team values remaining intact...', validation.length, property().team_name)
+  return validate_values(original, validation)
+}
+
+function validate_untouched_values_not_team(guv_sheet, backup_sheet) {
+  var original = filter_sheet(backup_sheet, property().itagile_guv_data_tab, 
+                              function(row, index) {return (index > 0 && row[2] != property().team_name)})
+  var validation = filter_sheet(guv_sheet, property().itagile_guv_data_tab,
+                                function(row, index) {return (index > 0 && row[2] != property().team_name)})
+
+  console.log('validating [%d] existing other team values remaining intact...', validation.length)
+  return validate_values(original, validation)
+}
+
+function validate_copied_values(suedsterne_guv, guv_sheet) {
+  var original = filter_sheet(suedsterne_guv, property().suedsterne_guv_data_tab,
+                              function(row, index){return (row[0] === property().copy_year)})
   
-  console.log('validating [%d] %s values successfully copied...', original_suedsterne_data.length, team_name)
-  return validate_values(original_suedsterne_data, copied_suedsterne_data)
+  var copied = filter_sheet(guv_sheet, property().itagile_guv_data_tab, 
+                            function(row, index) {return (row[2] === property().team_name && row[0] === property().copy_year)})
+  
+  console.log('validating [%d] %s values successfully copied...', original.length, property().team_name)
+  return validate_values(original, copied)
 }
 
 function array_equals(a, b){
@@ -48,7 +50,22 @@ function d2_array_equals(a, b){
 }
 
 function validate_values(original_data, validation_data) {
-  return d2_array_equals(original_data,validation_data)  
+  var same = d2_array_equals(original_data,validation_data)
+  if(same) {
+    console.log('success')
+  } else {
+    console.log('fail! validating every row...')
+    for(var i=0; i<validation_data.length; i++) {
+      if(array_equals(original_data[i], validation_data[i])) {
+        console.log('row[%d] OK', i)
+      } else {
+        console.log('row[%d] FAIL: [%s] <> [%s]', i, original_data[i], validation_data[i])
+      }
+    }
+    console.log(original_data)
+    console.log(validation_data)
+  }
+  return same
 }
 
 function filter_sheet(sheet, tab, predicate) {

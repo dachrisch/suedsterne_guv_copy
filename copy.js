@@ -1,4 +1,4 @@
-function delete_old_entries(guv_sheet) {
+function delete_old_entries(guv_sheet, backup_file) {
   var rohdaten = guv_sheet.getSheetByName(property().itagile_guv_data_tab)
   
   // collect indexes and reverse sort them (so we can delete from bottom to top to ensure index position to be safe)
@@ -8,13 +8,15 @@ function delete_old_entries(guv_sheet) {
     }
   }).filter(function(row) {return !(row === undefined)}).sort(function(a, b){ return b-a})
   
-  console.info('deleting [%d] %s entries in [%s]', suedsterne_row_indexes.length, property().team_name, guv_sheet.getName())
+  console.info('deleting [%d] %s entries in [%s]...', suedsterne_row_indexes.length, property().team_name, guv_sheet.getName())
   
-  console.log('deleting rows %s', suedsterne_row_indexes)
+  console.log('deleting rows [%s]...', suedsterne_row_indexes)
   suedsterne_row_indexes.forEach(function(row, index){ 
     console.log(Utilities.formatString('[%02d%%]deleting row[%d]', (index / suedsterne_row_indexes.length*100), row + 1));
-    rohdaten.deleteRow(row + 1) })
-  console.info('deleted [%d] entries', suedsterne_row_indexes.length)
+    rohdaten.deleteRow(row + 1) 
+    validate_untouched_values(guv_sheet, backup_file)
+  })
+  console.log('deleted [%d] entries', suedsterne_row_indexes.length)
 }
 
 function copy_new_values(source, destination) {
