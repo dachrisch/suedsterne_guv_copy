@@ -55,15 +55,15 @@ function validate_values(original_data, validation_data) {
     console.log('success')
   } else {
     console.log('fail! validating every row...')
-    for(var i=0; i<validation_data.length; i++) {
-      if(array_equals(original_data[i], validation_data[i])) {
-        console.log('row[%d] OK', i)
-      } else {
+    for(var i=0; i<Math.min(original_data.length, validation_data.length); i++) {
+      if(!array_equals(original_data[i], validation_data[i])) {
         console.log('row[%d] FAIL: [%s] <> [%s]', i, original_data[i], validation_data[i])
+        for(var j=0; j<Math.min(original_data[i].length, validation_data[i].length); j++) {
+          console.log('[%s] === [%s]?: %s', original_data[i][j], validation_data[i][j], 
+                      original_data[i][j] === validation_data[i][j])
+        }
       }
     }
-    console.log(original_data)
-    console.log(validation_data)
   }
   return same
 }

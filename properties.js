@@ -4,9 +4,10 @@ function property() {
     this.suedsterne_guv_sheet = open_sheet(this.suedsterne_guv_sheet_id)
     this.suedsterne_guv_data_tab = 'Kopiere das'
     // GuV zum Testen
-    this.itagile_guv_sheet_id = '1wkcR4JffEwbJ7IwuoqtDH1bktq3un9RTGTL6IUmvtvs'
+    // this.itagile_guv_sheet_id = '1wkcR4JffEwbJ7IwuoqtDH1bktq3un9RTGTL6IUmvtvs'
     // *******!!!!! Production GuV !!!!!!*********
-    //this.itagile_guv_sheet_id = '1X1iHySk9hoSNphzSiqNnE0ikV27VqMHHF3aD5r_lgec'
+    // Dry Run
+    this.itagile_guv_sheet_id = '1uKkwqCx-E8lhzT0_edUJhwYteRaGpwKX8AkDMq0985o'
     this.itagile_guv_sheet = open_sheet(this.itagile_guv_sheet_id)
     this.itagile_guv_data_tab = 'Rohdaten'
     this.expected_header = 'Jahr,Monat,Zelle,µZell,MA,Beschreibung,Kernprodukt,Typ,Ertrag,Aufwand,#Sätze,#Tagessatz,#RK,Reisekosten,RG-Nr'.split(',')

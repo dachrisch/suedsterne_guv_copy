@@ -1,7 +1,7 @@
 function _current_guv_data_without_current_sued() {
   let current_guv_data = filter_sheet(property().itagile_guv_sheet,
                                        property().itagile_guv_data_tab,
-                                       function(){return true})
+                                       function(row){return row[0]})
   
   let header_row = current_guv_data[0]
   
@@ -14,7 +14,7 @@ function _current_guv_data_without_current_sued() {
   console.info('found [%d] entries in GuV [%s]', current_guv_data.length, property().itagile_guv_sheet.getName())
   
   let current_data_without_current_sued = current_guv_data
-  .filter(function (row){return !(row[2] === property().team_name && row[0] === property().copy_year)})
+  .filter(function (row, index){return !(row[2] === property().team_name && row[0] === property().copy_year)})
   
   console.log('[%d] other teams values after filtering out sued values', current_data_without_current_sued.length)
   
