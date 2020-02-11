@@ -67,15 +67,3 @@ function validate_values(original_data, validation_data) {
   }
   return same
 }
-
-function filter_sheet(sheet, tab, predicate) {
-  var data = sheet
-  .getSheetByName(tab)
-  .getRange(property().copy_range)
-  .getValues()
-  .filter(function(row, index){ 
-    return predicate(row, index)
-  }).filter(function(row) {return !(row === undefined)})
-  
-  return data
-}
