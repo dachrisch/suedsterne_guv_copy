@@ -16,6 +16,7 @@ function copy_suedsterne_guv_to_central_guv() {
     }
   }
   
+  /*
   try {
     backup_file = hot_run()
   } catch(error) {
@@ -28,6 +29,7 @@ function copy_suedsterne_guv_to_central_guv() {
   }
   
   production_mailing(backup_file)
+  */
   
   lock.releaseLock();
 
@@ -57,9 +59,18 @@ function production_mailing(backup_file) {
 function dry_run() {
   var suedsterne_guv = SpreadsheetApp.openById(property().suedsterne_guv_sheet_id)
   var central_guv = SpreadsheetApp.openById(property().itagile_guv_sheet_id)
-  var dry_file = create_copy(central_guv, 'Dry run')
-  console.info('performing dry run on sheet [%s]...', dry_file.getName())
-  return run_and_validate(suedsterne_guv, SpreadsheetApp.openById(dry_file.getId()))
+  var dry_guv = SpreadsheetApp.openById(create_copy(central_guv, 'Dry run').getId())
+  
+  dry_guv.getSheets()
+  .filter(function(sheet) {
+    return sheet.getName() !== property().itagile_guv_data_tab
+  })
+  .forEach(function(sheet){
+    console.log('deleting view sheet [%s]', sheet.getName())
+    dry_guv.deleteSheet(sheet)
+  })
+  console.info('performing dry run on sheet [%s]...', dry_guv.getName())
+  return run_and_validate(suedsterne_guv, dry_guv)
 }
 
 function hot_run() {
@@ -72,7 +83,7 @@ function hot_run() {
 function run_and_validate(source, destination) {
   console.log('backing up original guv [%s]...', destination.getName())
   var backup_file = create_copy(destination, 'Backup')
-  delete_old_entries(destination, SpreadsheetApp.openById(backup_file.getId()))
+  delete_old_entries(destination)
   copy_new_values(source, destination)
   if(validate(destination, SpreadsheetApp.openById(backup_file.getId()), source)) {
     console.info('successfully validated all data rows. all is fine')
