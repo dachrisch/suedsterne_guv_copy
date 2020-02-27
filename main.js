@@ -5,19 +5,8 @@ function copy_suedsterne_guv_to_central_guv() {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
 
-  // throws error when validating fails
   try {
-    dry_run()
-  } catch(error) {
-    if(error['type'] === 'validation_failed') {
-      throw error['subject']
-    } else {
-      throw error
-    }
-  }
-
-  try {
-    backup_file = hot_run()
+    hot_run()
   } catch(error) {
     if(error['type'] === 'validation_failed') {
       MailApp.sendEmail(property().failure_email, error['subject'], error['action'])
@@ -31,23 +20,6 @@ function copy_suedsterne_guv_to_central_guv() {
   lock.releaseLock();
 
   console.timeEnd(label)
-}
-
-function dry_run() {
-  const suedsterne_guv = SpreadsheetApp.openById(property().suedsterne_guv_sheet_id)
-  const central_guv = SpreadsheetApp.openById(property().itagile_guv_sheet_id)
-  const dry_guv = SpreadsheetApp.openById(create_copy(central_guv, 'Dry run').getId())
-  
-  dry_guv.getSheets()
-  .filter(function(sheet) {
-    return sheet.getName() !== property().itagile_guv_data_tab
-  })
-  .forEach(function(sheet){
-    console.log('deleting view sheet [%s]', sheet.getName())
-    dry_guv.deleteSheet(sheet)
-  })
-  console.info('performing dry run on sheet [%s]...', dry_guv.getName())
-  return run_and_validate(suedsterne_guv, dry_guv)
 }
 
 function hot_run() {
@@ -66,7 +38,7 @@ function run_and_validate(source, destination) {
     console.info('successfully validated all data rows. all is fine')
   } else {
     const subject = Utilities.formatString('Failure during update of [%s]', destination.getName())
-    const action = Utilities.formatString('Please restore backup [%s]', backup_file.getUrl())
+    const action = Utilities.formatString('Revert to previous version in [%s]', destination.getUrl())
     console.error('%s: %s', subject, action)
     throw {'type' : 'validation_failed', 'subject' : subject, 'action' : action }
   }
