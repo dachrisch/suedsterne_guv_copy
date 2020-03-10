@@ -36,6 +36,7 @@ function run_and_validate(source, destination) {
   copy_new_values(source, destination)
   if(validate(destination, SpreadsheetApp.openById(backup_file.getId()), source)) {
     console.info('successfully validated all data rows. all is fine')
+    log_update(destination)
   } else {
     const subject = Utilities.formatString('Failure during update of [%s]', destination.getName())
     const action = Utilities.formatString('Revert to previous version in [%s]', destination.getUrl())

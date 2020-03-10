@@ -7,6 +7,8 @@ function property() {
     // *******!!!!! Production GuV !!!!!!*********
     this.itagile_guv_sheet_id = '1X1iHySk9hoSNphzSiqNnE0ikV27VqMHHF3aD5r_lgec'
     this.itagile_guv_data_tab = 'Rohdaten'
+    this.itagile_details_data_tab = 'Zell-Details'
+    this.details_cell = 'C1'
     this.copy_range = 'A:O'
     this.copy_year = 2020
     this.team_name = 'Südsterne'

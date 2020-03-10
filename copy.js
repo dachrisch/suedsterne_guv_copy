@@ -38,3 +38,9 @@ function copy_new_values(source, destination) {
   target_sheet.getRange(target_range).setValues(source_data)
   console.log('done')
 }
+
+function log_update(destination) {
+  destination.getSheetByName(property().itagile_details_data_tab)
+  .getRange(property().details_cell)
+  .setValue(Utilities.formatString('Stand Daten Südsterne: %s', Utilities.formatDate(new Date(), "GMT+1", "dd.MM.yyyy")))
+}
