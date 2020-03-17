@@ -9,7 +9,7 @@ function property() {
       },
       'it_agile' : {
         'data' : {
-          'id' : '1rmQdc6ZLxpBoIAvBPdg4-yEV5Lh31DfdWjPz17c_gvI',
+          'id' : '10fugU24yWY0fmt1y4NSNnnN-omdd56WEbhZmJngMaZc',
        
           // *******!!!!! Production GuV !!!!!!*********
           // 'id' : '1X1iHySk9hoSNphzSiqNnE0ikV27VqMHHF3aD5r_lgec',
