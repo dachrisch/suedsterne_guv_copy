@@ -1,5 +1,5 @@
 function delete_old_entries(guv_sheet) {
-  var rohdaten = guv_sheet.getSheetByName(property().itagile_guv_data_tab)
+  var rohdaten = guv_sheet.getSheetByName(property().guv.it_agile.data.tab)
   
   // filtered values aren't deleted properly
   if(rohdaten.getFilter() !== null) {
@@ -8,12 +8,12 @@ function delete_old_entries(guv_sheet) {
   
   // collect indexes and reverse sort them (so we can delete from bottom to top to ensure index position to be safe)
   var suedsterne_row_indexes = rohdaten.getRange('A:C').getValues().map(function(row, index){ 
-    if(row[2] === property().team_name && row[0] === property().copy_year) {
+    if(row[2] === property().team && row[0] === property().copy.year) {
       return index + 1
     }
   }).filter(function(row) {return !(row === undefined)}).sort(function(a, b){ return b-a})
   
-  console.info('deleting [%d] %s entries in [%s]...', suedsterne_row_indexes.length, property().team_name, guv_sheet.getName())
+  console.info('deleting [%d] %s entries in [%s]...', suedsterne_row_indexes.length, property().team, guv_sheet.getName())
   
   console.log('deleting rows [%s]...', suedsterne_row_indexes)
   suedsterne_row_indexes.forEach(function(row, index){ 
@@ -24,14 +24,14 @@ function delete_old_entries(guv_sheet) {
 }
 
 function copy_new_values(source, destination) {
-  var source_sheet = source.getSheetByName(property().suedsterne_guv_data_tab)
-  var target_sheet = destination.getSheetByName(property().itagile_guv_data_tab)
-  var source_data = source_sheet.getRange(property().copy_range).getValues().filter(function(row){ 
-    return (row[0] === property().copy_year)
+  var source_sheet = source.getSheetByName(property().guv.suedsterne.mapper.tab)
+  var target_sheet = destination.getSheetByName(property().guv.it_agile.data.tab)
+  var source_data = source_sheet.getRange(property().copy.range).getValues().filter(function(row){ 
+    return (row[0] === property().copy.year)
   })
   var first_row_for_copy = target_sheet.getLastRow() + 1
 
-  var range_x_y = property().copy_range.split(':')
+  var range_x_y = property().copy.range.split(':')
   
   if(source_data.length < 1) { throw 'Nothing to copy' }
   var target_range = Utilities.formatString('%s%d:%s%d', range_x_y[0], first_row_for_copy, range_x_y[1], first_row_for_copy + source_data.length - 1)
@@ -42,7 +42,7 @@ function copy_new_values(source, destination) {
 }
 
 function log_update(destination) {
-  destination.getSheetByName(property().itagile_details_data_tab)
-  .getRange(property().details_cell)
+  destination.getSheetByName(property().guv.it_agile.details.tab)
+  .getRange(property().guv.it_agile.details.cell)
   .setValue(Utilities.formatString('Stand Daten Südsterne: %s', Utilities.formatDate(new Date(), "GMT+1", "dd.MM.yyyy")))
 }

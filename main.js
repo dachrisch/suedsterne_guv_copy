@@ -9,7 +9,7 @@ function copy_suedsterne_guv_to_central_guv() {
     hot_run()
   } catch(error) {
     if(error['type'] === 'validation_failed') {
-      MailApp.sendEmail(property().failure_email, error['subject'], error['action'])
+      MailApp.sendEmail(property().notification.email, error['subject'], error['action'])
       throw error['subject']
     } else {
       throw error
@@ -23,8 +23,8 @@ function copy_suedsterne_guv_to_central_guv() {
 }
 
 function hot_run() {
-  const suedsterne_guv = SpreadsheetApp.openById(property().suedsterne_guv_sheet_id)
-  const central_guv = SpreadsheetApp.openById(property().itagile_guv_sheet_id)
+  const suedsterne_guv = SpreadsheetApp.openById(property().guv.suedsterne.mapper.id)
+  const central_guv = SpreadsheetApp.openById(property().guv.it_agile.data.id)
   console.info('performing hot run on [%s]...', central_guv.getName())
   return run_and_validate(suedsterne_guv, central_guv)
 }
@@ -48,7 +48,7 @@ function run_and_validate(source, destination) {
 }
 
 function create_copy(guv_sheet, prefix) {
-  backup_folder = DriveApp.getFoldersByName(property().backup_folder_name).next()
+  backup_folder = DriveApp.getFoldersByName(property().backup.folder).next()
   backup_file = DriveApp.getFileById(guv_sheet.getId()).makeCopy(prefix + '_' + Utilities.formatDate(new Date(), 'GMT+1', 'yyyyMMddHHmmss'), backup_folder)
   return backup_file
 }
