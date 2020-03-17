@@ -30,7 +30,7 @@ function batch_delete_old_entries(destination) {
     Sheets.Spreadsheets.batchUpdate({'requests': suedsterne_row_delete_dimensions}, destination.getId())
     SpreadsheetApp.flush()
 
-    console.info('deleted [%d] entries', suedsterne_row_delete_dimensions.length)
+    console.log('deleted [%d] entries', suedsterne_row_delete_dimensions.length)
   }
 
 }
