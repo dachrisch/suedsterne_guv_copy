@@ -29,8 +29,6 @@ function property() {
     },
     'notification' : {
       'email' : 'suedsterne+guv_bot@it-agile.de'
-    },
-    'wait_time' : 3000
+    }
   }
-
 }
