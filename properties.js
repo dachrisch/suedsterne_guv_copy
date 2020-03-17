@@ -9,10 +9,8 @@ function property() {
       },
       'it_agile' : {
         'data' : {
-          'id' : '10fugU24yWY0fmt1y4NSNnnN-omdd56WEbhZmJngMaZc',
-       
           // *******!!!!! Production GuV !!!!!!*********
-          // 'id' : '1X1iHySk9hoSNphzSiqNnE0ikV27VqMHHF3aD5r_lgec',
+          'id' : '1X1iHySk9hoSNphzSiqNnE0ikV27VqMHHF3aD5r_lgec',
           'tab' : 'Rohdaten',
         },
         'details' : {
