@@ -31,8 +31,9 @@ function validate_untouched_values_not_team(guv_sheet, backup_sheet) {
 }
 
 function validate_copied_values(suedsterne_guv, guv_sheet) {
-  var original = filter_sheet(suedsterne_guv, property().guv.suedsterne.mapper.tab,
-                              function(row, index){return (row[0] === property().copy.year)})
+  var original = sued_to_guv(filter_sheet(suedsterne_guv, property().guv.suedsterne.data.tab,
+                              function(row, index){return (row[1] === property().copy.year)}))
+  
   
   var copied = filter_sheet(guv_sheet, property().guv.it_agile.data.tab, 
                             function(row, index) {return (row[2] === property().team && row[0] === property().copy.year)})
@@ -40,6 +41,7 @@ function validate_copied_values(suedsterne_guv, guv_sheet) {
   console.log('validating [%d] %s values successfully copied...', original.length, property().team)
   return validate_values(original, copied)
 }
+
 
 function array_equals(a, b){
   if(!(a.length === b.length)) {
