@@ -14,6 +14,7 @@ function copy_new_values(source, destination) {
   console.info('copying from [%d] entries from [%s] to [%s]:[%s]...', source_data.length, source.getName(), destination.getName(), target_range)
   
   target_sheet.getRange(target_range).setValues(source_data)
+  SpreadsheetApp.flush()
   console.log('done')
 }
 

@@ -32,7 +32,7 @@ function hot_run() {
 function run_and_validate(source, destination) {
   console.log('backing up original guv [%s]...', destination.getName())
   const backup_file = create_copy(destination, 'Backup')
-  delete_old_entries(destination)
+  batch_delete_old_entries(destination)
   copy_new_values(source, destination)
   if(validate(destination, SpreadsheetApp.openById(backup_file.getId()), source)) {
     console.info('successfully validated all data rows. all is fine')

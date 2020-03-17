@@ -4,3 +4,9 @@ function test_validation() {
   
   console.log(validate_copied_values(suedsterne_guv, guv_sheet))
 }
+
+function test_delete_sleep() {
+  var guv_sheet = SpreadsheetApp.openById(property().guv.it_agile.data.id)
+  
+  batch_delete_old_entries(guv_sheet)
+}
