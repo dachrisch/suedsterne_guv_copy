@@ -10,9 +10,9 @@ function copy_new_values(source, destination) {
   const range_x_y = property().copy.range.split(':')
   
   if(source_data.length < 1) { throw 'Nothing to copy' }
+  
   const target_range = Utilities.formatString('%s%d:%s%d', range_x_y[0], first_row_for_copy, range_x_y[1], first_row_for_copy + source_data.length - 1)
   console.info('copying from [%d] entries from [%s] to [%s]:[%s]...', source_data.length, source.getName(), destination.getName(), target_range)
-  
   target_sheet.getRange(target_range).setValues(source_data)
   SpreadsheetApp.flush()
   console.log('done')
