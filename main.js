@@ -1,4 +1,4 @@
-function copy_suedsterne_guv_to_central_guv() {  
+function copy_suedsterne_guv_mapper_to_central_guv() {  
   const label = 'guv copy'
   console.time(label)
 
@@ -23,10 +23,10 @@ function copy_suedsterne_guv_to_central_guv() {
 }
 
 function hot_run() {
-  const suedsterne_guv = SpreadsheetApp.openById(property().guv.suedsterne.mapper.id)
+  const suedsterne_guv_mapper = SpreadsheetApp.openById(property().guv.suedsterne.mapper.id)
   const central_guv = SpreadsheetApp.openById(property().guv.it_agile.data.id)
   console.info('performing hot run on [%s]...', central_guv.getName())
-  return run_and_validate(suedsterne_guv, central_guv)
+  return run_and_validate(suedsterne_guv_mapper, central_guv)
 }
 
 function run_and_validate(source, destination) {

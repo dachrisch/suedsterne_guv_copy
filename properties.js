@@ -5,6 +5,10 @@ function property() {
         'mapper' : {
           'id' : '1Jt3hcAmm3m_pLZ9OjNLZG8TcqY9yE9xMVeZVCtinFfw',
           'tab' : 'Kopiere das'
+        },
+        'data' : {
+          'id' : '1RoA5J-fHX-KyE5nDLFFenLrxhwA065K-fiyk4laYG3k',
+          'tab' : 'Dateneingabe'
         }
       },
       'it_agile' : {
