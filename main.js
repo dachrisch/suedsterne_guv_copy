@@ -26,7 +26,7 @@ function hot_run() {
   const suedsterne_guv = SpreadsheetApp.openById(property().guv.suedsterne.data.id)
   const central_guv = SpreadsheetApp.openById(property().guv.it_agile.data.id)
   console.info('performing hot run on [%s]...', central_guv.getName())
-  return run_and_validate(suedsterne_guv, central_guv)
+  run_and_validate(suedsterne_guv, central_guv)
 }
 
 function run_and_validate(source, destination) {
@@ -37,14 +37,13 @@ function run_and_validate(source, destination) {
   if(validate(destination, SpreadsheetApp.openById(backup_file.getId()), source)) {
     console.info('successfully validated all data rows. all is fine')
     log_update(destination)
+    backup_file.setTrashed(true)
   } else {
     const subject = Utilities.formatString('Failure during update of [%s]', destination.getName())
     const action = Utilities.formatString('Revert to previous version in [%s]', destination.getUrl())
     console.error('%s: %s', subject, action)
     throw {'type' : 'validation_failed', 'subject' : subject, 'action' : action }
   }
-
-  return backup_file
 }
 
 function create_copy(guv_sheet, prefix) {

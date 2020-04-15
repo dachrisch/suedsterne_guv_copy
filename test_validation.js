@@ -10,3 +10,7 @@ function test_delete_sleep() {
   
   batch_delete_old_entries(guv_sheet)
 }
+
+function delete_file() {
+  DriveApp.getFilesByName('Backup_20200415114054').next().setTrashed(true)
+}  
