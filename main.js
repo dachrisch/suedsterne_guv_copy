@@ -9,8 +9,11 @@ function copy_suedsterne_guv_to_central_guv() {
     hot_run()
   } catch(error) {
     if(error['type'] === 'validation_failed') {
-      MailApp.sendEmail(property().notification.email, error['subject'], error['action'])
-      throw error['subject']
+      MailApp.sendEmail(property().notification.email, error['subject'], Utilities.formatString('%s\n%s', error['message'], error['action']))
+      throw Utilities.formatString('%s: %s', error['subject'], error['message'])
+    } else if(error['type'] === 'mapping_error') {
+      MailApp.sendEmail(property().notification.email, 'Mapping error - check Source file', Utilities.formatString('%s\n%s', error['message'], error['details']))
+      throw Utilities.formatString('[%s] %s', error['message'], error['details'])
     } else {
       throw error
     }
@@ -34,20 +37,16 @@ function run_and_validate(source, destination) {
   const backup_file = create_copy(destination, 'Backup')
   batch_delete_old_entries(destination)
   copy_new_values(source, destination)
-  if(validate(destination, SpreadsheetApp.openById(backup_file.getId()), source)) {
+  try {
+    validate(destination, SpreadsheetApp.openById(backup_file.getId()), source)
     console.info('successfully validated all data rows. all is fine')
     log_update(destination)
     backup_file.setTrashed(true)
-  } else {
+  } catch(error) {
     const subject = Utilities.formatString('Failure during update of [%s]', destination.getName())
     const action = Utilities.formatString('Revert to previous version in [%s]', destination.getUrl())
-    console.error('%s: %s', subject, action)
-    throw {'type' : 'validation_failed', 'subject' : subject, 'action' : action }
+    const error_message = error
+    console.error('%s: %s', subject, error_message)
+    throw {'type' : 'validation_failed', 'subject' : subject, 'action' : action, 'message' : error_message }
   }
-}
-
-function create_copy(guv_sheet, prefix) {
-  backup_folder = DriveApp.getFoldersByName(property().backup.folder).next()
-  backup_file = DriveApp.getFileById(guv_sheet.getId()).makeCopy(prefix + '_' + Utilities.formatDate(new Date(), 'GMT+1', 'yyyyMMddHHmmss'), backup_folder)
-  return backup_file
 }

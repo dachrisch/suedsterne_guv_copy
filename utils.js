@@ -1,20 +1,38 @@
-function array_equals(a, b){
-  if(!(a.length === b.length)) {
-    console.log('array size differs: [%d] <> [%d]', a.length, b.length)
-  }
-  return a.length === b.length && a.every(function(item,idx) { 
-    if(!(item === b[idx])) {
-      console.log('row[%d] FAIL: [%s] <> [%s]', idx, item, b[idx])
-    }
-    return item === b[idx]
-  })
+function validate_values(original_data, validation_data) {
+  assert_d2_array_equals(original_data,validation_data)
+  console.log('SUCCESS')
 }
 
-function d2_array_equals(a, b){
+function log_and_throw(error_message) {
+  console.error('ERROR: ' + error_message)
+  throw error_message
+}
+
+function assert_array_equals(a, b){
   if(!(a.length === b.length)) {
-    console.log('array size differs: [%d] <> [%d]', a.length, b.length)
+    let message = Utilities.formatString('array size differs: [%s](%d) <> [%s](%d)', a, a.length, b, b.length)
+    log_and_throw(message)
   }
-  return a.length === b.length && a.every(function(item,idx) { return array_equals(item, b[idx])})
+  a.every(function(item,idx) { 
+    // adding instead of stringFormat to be able to compute undefined values
+    let message = 'comparing item(' + idx + ') in [' + a + '] <> [' + b + ']: [' + item + '] <> [' + b[idx] + ']'
+    
+    if(item === b[idx]) {
+      console.log(Utilities.formatString('SUCCESS %s', message))
+      return true
+    } else {
+      log_and_throw(message)
+    }
+  })
+  return true
+}
+
+function assert_d2_array_equals(a, b){
+  if(!(a.length === b.length)) {
+    let message = Utilities.formatString('array size differs: (%d) <> (%d)', a.length, b.length)
+    log_and_throw(message)
+  }
+  a.every(function(item,idx) { return assert_array_equals(item, b[idx])})
 }
 
 function filter_sheet(sheet, tab, predicate) {
@@ -35,4 +53,10 @@ function filter_sheet(sheet, tab, predicate) {
   })
   
   return filled_data
+}
+
+function create_copy(guv_sheet, prefix) {
+  backup_folder = DriveApp.getFoldersByName(property().backup.folder).next()
+  backup_file = DriveApp.getFileById(guv_sheet.getId()).makeCopy(prefix + '_' + Utilities.formatDate(new Date(), 'GMT+1', 'yyyyMMddHHmmss'), backup_folder)
+  return backup_file
 }

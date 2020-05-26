@@ -11,6 +11,8 @@ function property() {
         'data' : {
           // *******!!!!! Production GuV !!!!!!*********
           'id' : '1X1iHySk9hoSNphzSiqNnE0ikV27VqMHHF3aD5r_lgec',
+          // *** Test ***
+//          'id' : '1l8x211kB3219Kr_R8xActkvUhr_33aR3w7lZzV63mWw',
           'tab' : 'Rohdaten',
         },
         'details' : {
