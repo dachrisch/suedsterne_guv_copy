@@ -3,7 +3,10 @@ function validate_values(original_data, validation_data) {
   console.log('SUCCESS')
 }
 
-function log_and_throw(error_message) {
+function log_and_throw(error_message, recent_messages) {
+  recent_messages.forEach(function(message) {
+    console.log(message)
+  })
   console.error('ERROR: ' + error_message)
   throw error_message
 }
@@ -13,15 +16,16 @@ function assert_array_equals(a, b){
     let message = Utilities.formatString('array size differs: [%s](%d) <> [%s](%d)', a, a.length, b, b.length)
     log_and_throw(message)
   }
+  let messages = []
   a.every(function(item,idx) { 
     // adding instead of stringFormat to be able to compute undefined values
     let message = 'comparing item(' + idx + ') in [' + a + '] <> [' + b + ']: [' + item + '] <> [' + b[idx] + ']'
     
     if(item === b[idx]) {
-      console.log(Utilities.formatString('SUCCESS %s', message))
+      messages.push(Utilities.formatString('SUCCESS %s', message))
       return true
     } else {
-      log_and_throw(message)
+      log_and_throw(message, messages)
     }
   })
   return true
