@@ -6,6 +6,7 @@ function copy_suedsterne_guv_to_central_guv() {
   lock.waitLock(30000);
 
   try {
+    raise_if_unhealty()
     hot_run()
   } catch(error) {
     if(error['type'] === 'validation_failed') {
@@ -14,6 +15,9 @@ function copy_suedsterne_guv_to_central_guv() {
     } else if(error['type'] === 'mapping_error') {
       MailApp.sendEmail(property().notification.email, 'Mapping error - check Source file', Utilities.formatString('%s\n%s', error['message'], error['details']))
       throw Utilities.formatString('[%s] %s', error['message'], error['details'])
+    } else if(error['type'] === 'unhealthy') {
+      MailApp.sendEmail(property().notification.email, 'Not safe to perfomr hot run', `dry run failed with error [${error}]. No changed were made, but the script will not run again to prevent future failures`)
+      throw error
     } else {
       throw error
     }

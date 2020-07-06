@@ -12,7 +12,7 @@ function property() {
           // *******!!!!! Production GuV !!!!!!*********
           'id' : '1X1iHySk9hoSNphzSiqNnE0ikV27VqMHHF3aD5r_lgec',
           // *** Test ***
-//          'id' : '1l8x211kB3219Kr_R8xActkvUhr_33aR3w7lZzV63mWw',
+//          'id' : '1jE5oAF3QY329IYOoOkoRpKlglwlZBJOkVDCbp3_t9-0',
           'tab' : 'Rohdaten',
         },
         'details' : {
@@ -30,7 +30,7 @@ function property() {
       'folder' : '_guv_backups'
     },
     'notification' : {
-      'email' : 'suedsterne+guv_bot@it-agile.de'
+      'email' : 'cd+guv_bot@it-agile.de'
     }
   }
 }

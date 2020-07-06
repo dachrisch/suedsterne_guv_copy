@@ -59,8 +59,8 @@ function filter_sheet(sheet, tab, predicate) {
   return filled_data
 }
 
-function create_copy(guv_sheet, prefix) {
+function create_copy(sheet, prefix) {
   backup_folder = DriveApp.getFoldersByName(property().backup.folder).next()
-  backup_file = DriveApp.getFileById(guv_sheet.getId()).makeCopy(prefix + '_' + Utilities.formatDate(new Date(), 'GMT+1', 'yyyyMMddHHmmss'), backup_folder)
+  backup_file = DriveApp.getFileById(sheet.getId()).makeCopy(prefix + '_' + Utilities.formatDate(new Date(), 'GMT+1', 'yyyyMMddHHmmss'), backup_folder)
   return backup_file
 }
