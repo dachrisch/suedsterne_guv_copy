@@ -30,7 +30,7 @@ function property() {
       'folder' : '_guv_backups'
     },
     'notification' : {
-      'email' : 'cd+guv_bot@it-agile.de'
+      'email' : 'suedsterne+guv_bot@it-agile.de'
     }
   }
 }
