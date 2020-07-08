@@ -31,6 +31,23 @@ function property() {
     },
     'notification' : {
       'email' : 'suedsterne+guv_bot@it-agile.de'
+    },
+    'health' : {
+      'indicator' : 'healthy',
+      'error' : 'error',
+      'runtime' : 'run_time'
     }
   }
+}
+
+function prop_set(property, value) {
+  PropertiesService.getScriptProperties().setProperty(property, JSON.stringify(value))
+}
+
+function prop_get(property) {
+  return JSON.parse(PropertiesService.getScriptProperties().getProperty(property))
+}
+
+function prop_del(property) {
+  PropertiesService.getScriptProperties().deleteProperty(property)
 }

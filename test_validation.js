@@ -14,3 +14,9 @@ function test_delete_sleep() {
 function delete_file() {
   DriveApp.getFilesByName('Backup_20200415114054').next().setTrashed(true)
 }  
+
+function propset_object() {
+  prop_set(property().health.indicator, true)
+  const health = prop_get(property().health.indicator)
+  console.log(health)
+}
